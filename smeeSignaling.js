@@ -1,5 +1,9 @@
-import jsonp from "./jsonp.js";
-window.jsonp = jsonp;
+let jsonp;
+eval(`jsonp=(()=>{
+${(await(await fetch("https://raw.githubusercontent.com/alexbardas/jsonp-promise/master/index.js")).text()).replace(/\nmodule.exports.+?\n/,"")};
+return jsonp;
+})()`)
+
 function getCallback(channel) {
   return new Promise(callback => {
     let es = new EventSource(channel);
