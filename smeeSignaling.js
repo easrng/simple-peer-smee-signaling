@@ -1,8 +1,10 @@
 let jsonp;
-eval(`jsonp=(()=>{
+jsonp=(async()=>{
+  return eval(`(()=>{
 ${(await(await fetch("https://raw.githubusercontent.com/alexbardas/jsonp-promise/master/index.js")).text()).replace(/\nmodule.exports.+?\n/,"")};
 return jsonp;
 })()`)
+})();
 
 function getCallback(channel) {
   return new Promise(callback => {
@@ -47,7 +49,7 @@ async function getAnswer(offer) {
   let url = new URL("https://p2p-webchat.glitch.me/signalingdata");
   url.searchParams.set("smeeChannel", channel);
   url.searchParams.set("offer", offer);
-  let code = (await jsonp(
+  let code = (await (await jsonp)(
     "https://is.gd/create.php?format=json&url=" + encodeURIComponent(url.href)
   )).shorturl.split("is.gd/")[1];
   return { code, channel };
@@ -55,7 +57,7 @@ async function getAnswer(offer) {
 
 async function getInfo(code) {
   let info = new URL(
-    (await jsonp(
+    (await (await jsonp)(
       "https://is.gd/forward.php?format=json&shorturl=" +
         encodeURIComponent(code)
     )).url.replace(/\&amp\;/gi, "&")
