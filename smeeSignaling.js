@@ -51,7 +51,7 @@ async function getAnswer(offer) {
   url.searchParams.set("offer", offer);
   let code = (await (await jsonp)(
     "https://is.gd/create.php?format=json&url=" + encodeURIComponent(url.href)
-  )).shorturl.split("is.gd/")[1];
+  ).promise).shorturl.split("is.gd/")[1];
   return { code, channel };
 }
 
@@ -60,7 +60,7 @@ async function getInfo(code) {
     (await (await jsonp)(
       "https://is.gd/forward.php?format=json&shorturl=" +
         encodeURIComponent(code)
-    )).url.replace(/\&amp\;/gi, "&")
+    ).promise).url.replace(/\&amp\;/gi, "&")
   ).searchParams;
 
   return {
